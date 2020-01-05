@@ -12,5 +12,5 @@ Step 4: Start frontend using /frontend/server/server.sh
 Step 5: Start backed using /backed/server/server.sh  
 Step 6: Browse to http://[hostname]:8080/apps/monkscrolls/index.html  
 
-Optional Step
+### Optional Installation Step
 Modify /frontend/framework/conf/default_app.json to "wsadmin" and then http://[hostname]:8080 should auto redirect.
