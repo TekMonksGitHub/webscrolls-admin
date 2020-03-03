@@ -1,0 +1,41 @@
+<!-- 
+(C) 2015 TekMonks. All rights reserved.
+License: GPL2 - see enclosed license.txt file.
+-->
+
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="expires" content="-1">
+	
+	<link rel="stylesheet" type="text/css" href="./css/main.css">
+	
+	<title>{{i18n.Title}}</title>
+
+	<script type="module">
+		import {main} from "./js/main.mjs"; window.main=main; main.registerHandlers();
+		import {file_manager} from "./components/file-manager/file-manager.mjs"; file_manager.register();
+	</script>
+	<link rel="stylesheet" type="text/css" href="./css/main.css">
+</head>
+
+<body>
+
+
+<div id="container">
+	<div id="header">
+		<span onclick="main.showMenu()" id="menubutton">☰</span>
+		<span>{{url.path}}</span>
+	</div>
+
+	<div id="menu">
+		<span><img src="./img/logout.png" onclick="main.logout()">{{i18n.Logout}}</span>
+	</div>
+		
+	<file-manager path="{{url.path}}" id="fm"></file-manager>
+</div>
+
+</body>
+</html>

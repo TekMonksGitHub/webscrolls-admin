@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Raleway';
+}
+
+div#container {
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+div#header {
+    height: 50px;
+    line-height: 50px;
+    margin: 0;
+    box-sizing: border-box;
+    padding: 0;
+    display: flex;
+    flex-flow: row nowrap;
+    background-color: rgba(0, 0, 0, 0.185);
+}
+
+div#header > span:first-child {
+    font-size: 1.5em;
+    padding-left: 10px;
+    cursor: pointer;
+    padding-right: 10px;
+    width: 1em;
+    text-align: center;
+}
+
+div#header > span:first-child:hover {
+    transition: all 0.3s ease;
+    background-color: rgba(0, 0, 0, 0.185);
+}
+
+div#header > span:last-child {
+    font-size: 1.2em;
+    width: 100%;
+    text-align: center;
+}
+
+div#menu {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: start;
+    opacity: 1;
+    background-color: white;
+    border-top: 0.8px solid gray;
+    border-bottom: 0.8px solid gray;
+    opacity: 0;
+    transition: opacity 0.1s linear;
+    visibility: hidden;
+    height: 0px;
+    max-height: 0px;
+    background-color: rgba(0, 0, 0, 0.024);
+    overflow: hidden;
+    transition: max-height 0.18s ease-out;
+}
+
+div#menu.visible {
+    opacity: 1;
+    visibility: visible;
+    height: auto;
+}
+
+div#menu > span > img {
+    width: 50px;
+}
+
+div#menu > span {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+}
