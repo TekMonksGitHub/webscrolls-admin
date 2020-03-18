@@ -200,7 +200,7 @@ function register() {
 }
 
 async function createFile(element, isDirectory=false) {
-   const path = file_manager.getShadowRootByContainedElement(element).querySelector("#path").value;
+   const path = `${selectedPath}/${file_manager.getShadowRootByContainedElement(element).querySelector("#path").value}`;
 
    let resp = await apiman.rest(API_CREATEFILE, "GET", {path, isDirectory: isDirectory}, true);
    if (resp.result) router.reload(); else alert("Error");
