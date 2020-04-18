@@ -48,5 +48,7 @@ select:-webkit-autofill:focus {
 {{{styleBody}}}
 
 <input type="text" id="userid" placeholder="{{i18n.UserID}}" required><br/><br/>
-<input type="password" id="pass" placeholder="{{i18n.Password}}" required minlength="8"><br/><br/>
-<button onclick='monkshu_env.components["login-box"].signin(this)'>{{i18n.SignIn}}</button>
+<input type="password" id="pass" placeholder="{{i18n.Password}}" required minlength="8" 
+    onkeyup="if (event.keyCode == 13) monkshu_env.components['login-box'].getShadowRootByContainedElement(this).querySelector('#submit').click();"><br/><br/>
+<button id="submit" onclick='monkshu_env.components["login-box"].signin(this)'>{{i18n.SignIn}}</button>
+
