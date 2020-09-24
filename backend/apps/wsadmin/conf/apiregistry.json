@@ -5,5 +5,7 @@
     "/apps/wsadmin/deletefile" : "/apis/deletefile.js?get=true&key=fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389&needsToken=true",
     "/apps/wsadmin/createfile" : "/apis/createfile.js?get=true&key=fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389&needsToken=true",
     "/apps/wsadmin/renamefile" : "/apis/renamefile.js?get=true&key=fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389&needsToken=true",
-    "/apps/wsadmin/operatefile" : "/apis/operatefile.js?key=fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389&needsToken=true"
+    "/apps/wsadmin/copyfile" : "/apis/copyfile.js?get=true&key=fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389&needsToken=true",
+    "/apps/wsadmin/operatefile" : "/apis/operatefile.js?key=fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389&needsToken=true",
+    "/apps/wsadmin/downloadfile" : "/apis/downloadfile.js?key=fheiwu98237hjief8923ydewjidw834284hwqdnejwr79389&needsToken=true"
 }

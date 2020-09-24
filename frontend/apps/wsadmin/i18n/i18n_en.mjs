@@ -14,9 +14,15 @@ export const i18n = {
 "Search": "Search",
 "Upload": "Upload",
 "Create": "Create",
+"UploadMenu": "Upload...",
+"CreateMenu": "Create...",
 "CreateFile": "Create file...",
 "DeleteFile": "Delete",
 "EditFile": "Open...",
+"DownloadFile": "Download",
+"Cut": "Cut",
+"Copy": "Copy",
+"Paste": "Paste",
 "Path": "Name",
 "IsDirectory": "Is Directory?",
 "OK": "OK",
@@ -24,5 +30,6 @@ export const i18n = {
 "NewName": "Name",
 "Rename": "Rename...",
 "File": "File",
-"Directory": "Directory"
+"Directory": "Directory",
+"Error": "Unexpected error 😢"
 }

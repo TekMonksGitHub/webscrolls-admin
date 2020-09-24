@@ -1,15 +1,14 @@
 /* 
  * (C) 2020 TekMonks. All rights reserved.
  */
-const path = require("path");
-const API_CONSTANTS = require(`${__dirname}/lib/constants.js`);
-const CONF = require(`${API_CONSTANTS.CONF_DIR}/wsadmin.json`);
-const util = require("util");
 const fs = require("fs");
-const readdirAsync = util.promisify(fs.readdir);
+const path = require("path");
+const util = require("util");
+const statAsync = util.promisify(fs.stat);
 const rmdirAsync = util.promisify(fs.rmdir);
 const unlinkAsync = util.promisify(fs.unlink);
-const statAsync = util.promisify(fs.stat);
+const readdirAsync = util.promisify(fs.readdir);
+const CONF = require(`${API_CONSTANTS.CONF_DIR}/wsadmin.json`);
 
 exports.doService = async jsonReq => {
 	if (!validateRequest(jsonReq)) {LOG.error("Validation failure."); return CONSTANTS.FALSE_RESULT;}
