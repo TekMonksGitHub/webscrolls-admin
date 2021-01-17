@@ -1,3 +1,4 @@
 {
-    "CMS_ROOT": "C:/Users/Rohit Kapoor/source/webscrolls/frontend/apps/webscrolls/articles"
+    "CMS_ROOT": "C:/Users/Rohit Kapoor/source/webscrolls/frontend/apps/webscrolls/articles",
+    "SHARE_EXPIRY": 172800000
 }

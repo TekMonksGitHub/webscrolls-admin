@@ -17,6 +17,7 @@ export const i18n = {
 "UploadMenu": "Upload...",
 "CreateMenu": "Create...",
 "CreateFile": "Create file...",
+"Share": "Share...",
 "DeleteFile": "Delete",
 "EditFile": "Open...",
 "DownloadFile": "Download",
@@ -27,9 +28,11 @@ export const i18n = {
 "IsDirectory": "Is Directory?",
 "OK": "OK",
 "Cancel": "Cancel",
+"Close": "Close",
 "NewName": "Name",
 "Rename": "Rename...",
 "File": "File",
 "Directory": "Directory",
-"Error": "Unexpected error 😢"
+"Error": "Unexpected error 😢",
+"Copied": "Copied"
 }

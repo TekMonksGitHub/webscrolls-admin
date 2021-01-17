@@ -4,7 +4,6 @@
  */
 const bcrypt = require("bcryptjs");
 const sqlite3 = require("sqlite3");
-const API_CONSTANTS = require(`${__dirname}/constants.js`);
 let usersDB;
 
 exports.getUserHash = data => {

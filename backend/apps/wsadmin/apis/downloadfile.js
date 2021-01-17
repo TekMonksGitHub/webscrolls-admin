@@ -17,18 +17,18 @@ exports.handleRawRequest = async (url, jsonReq, headers, servObject) => {
 	if (!API_CONSTANTS.isSubdirectory(fullpath, CONF.CMS_ROOT)) {LOG.error(`Subdir validation failure: ${jsonReq.path}`); return CONSTANTS.FALSE_RESULT;}
 
 	try {
-        if (stats.isDirectory()) fullpath = await _zipDirectory(fullpath); const stats = await statsAsync(fullpath);
+        const stats = await statsAsync(fullpath); if (stats.isDirectory()) fullpath = await _zipDirectory(fullpath);
 
 		let respHeaders = {}; APIREGISTRY.injectResponseHeaders(url, {}, headers, respHeaders, servObject);
 		respHeaders["content-disposition"] = "attachment;filename=" + path.basename(fullpath);
-		respHeaders["content-length"] = stats.size;   // don't know ZIP size in advance
-		respHeaders["content-type"] = "application/octet-stream";
-		servObject.server.statusOK(respHeaders, servObject, true);	// do not gzip
+		respHeaders["content-length"] = stats.size;   
+		respHeaders["content-type"] = "application/octet-stream";	// try and add auto GZIP here to save bandwidth
+		servObject.server.statusOK(respHeaders, servObject, true);
 
         fs.createReadStream(fullpath, {"flags":"r","autoClose":true}).pipe(servObject.res, {end:true});
 	} catch (err) {
 		LOG.error(`Error in downloadfile: ${err}`);
-		if (!servObject.res.writableEnded) {servObject.server.statusInternalError(servObject, err); servObject.server.end();}
+		if (!servObject.res.writableEnded) {servObject.server.statusInternalError(servObject, err); servObject.server.end(servObject);}
 	}
 }
 

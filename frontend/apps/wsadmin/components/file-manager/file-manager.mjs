@@ -21,6 +21,9 @@ const API_RENAMEFILE = APP_CONSTANTS.BACKEND+"/apps/"+APP_CONSTANTS.APP_NAME+"/r
 const API_OPERATEFILE = APP_CONSTANTS.BACKEND+"/apps/"+APP_CONSTANTS.APP_NAME+"/operatefile";
 const API_DOWNLOADFILE = APP_CONSTANTS.BACKEND+"/apps/"+APP_CONSTANTS.APP_NAME+"/downloadfile";
 const API_COPYFILE = APP_CONSTANTS.BACKEND+"/apps/"+APP_CONSTANTS.APP_NAME+"/copyfile";
+const API_SHAREFILE = APP_CONSTANTS.BACKEND+"/apps/"+APP_CONSTANTS.APP_NAME+"/sharefile";
+const API_DOWNLOADFILE_SHARED = APP_CONSTANTS.BACKEND+"/apps/"+APP_CONSTANTS.APP_NAME+"/downloadsharedfile";
+
 
 const DIALOG_HOST_ELEMENT_ID = "templateholder";
 
@@ -58,16 +61,17 @@ async function elementRendered(element) {
    document.addEventListener("mousemove", e => {mouseX = e.pageX; mouseY = e.pageY;});
 
    const container = file_manager.getShadowRootByHostId(element.getAttribute("id")).querySelector("div#container");
-   document.addEventListener("click", _e => { if (!menuOpen) showMenu(container, true); else hideMenu(container); });
+   document.addEventListener(isMobile()?"click":"contextmenu", e => { e.preventDefault(); if (!menuOpen) showMenu(container, true); else hideMenu(container); });
+   if (!isMobile()) document.addEventListener("click", e => { e.stopPropagation(); if (menuOpen) hideMenu(container); });
 }
 
-function handleClick(element, path, isDirectory) {
+function handleClick(element, path, isDirectory, fromClickEvent) {
    selectedPath = path?path.replace(/[\/]+/g,"/"):selectedPath; 
    selectedIsDirectory = (isDirectory!== undefined) ? util.parseBoolean(isDirectory) : selectedIsDirectory;
    selectedElement = element;
    
-   if (timer) {clearTimeout(timer); editFile(element); timer=null;}
-   else timer = setTimeout(_=> {timer=null;showMenu(element)}, 400);
+   if (timer) {clearTimeout(timer); if (fromClickEvent) editFile(element); timer=null;}
+   else timer = setTimeout(_=> {timer=null;if ((fromClickEvent && isMobile())||!fromClickEvent) showMenu(element);}, 400);
 }
 
 function upload(containedElement) {
@@ -120,6 +124,7 @@ function showMenu(element, documentMenuOnly) {
       else shadowRoot.querySelector("div#contextmenu > span#paste").classList.add("hidden"); 
       shadowRoot.querySelector("div#contextmenu > span#edit").classList.add("hidden"); 
       shadowRoot.querySelector("div#contextmenu > span#hr1").classList.add("hidden"); 
+      shadowRoot.querySelector("div#contextmenu > span#sharefile").classList.add("hidden");
       shadowRoot.querySelector("div#contextmenu > span#renamefile").classList.add("hidden");
       shadowRoot.querySelector("div#contextmenu > span#deletefile").classList.add("hidden"); 
       shadowRoot.querySelector("div#contextmenu > span#downloadfile").classList.add("hidden");  
@@ -130,6 +135,7 @@ function showMenu(element, documentMenuOnly) {
       shadowRoot.querySelector("div#contextmenu > span#upload").classList.add("hidden");
       shadowRoot.querySelector("div#contextmenu > span#create").classList.add("hidden");
       shadowRoot.querySelector("div#contextmenu > span#hr1").classList.add("hidden"); 
+      shadowRoot.querySelector("div#contextmenu > span#sharefile").classList.add("hidden");
       shadowRoot.querySelector("div#contextmenu > span#renamefile").classList.add("hidden");
       shadowRoot.querySelector("div#contextmenu > span#deletefile").classList.add("hidden"); 
       shadowRoot.querySelector("div#contextmenu > span#downloadfile").classList.add("hidden");  
@@ -141,6 +147,7 @@ function showMenu(element, documentMenuOnly) {
    } else {
       shadowRoot.querySelector("div#contextmenu > span#edit").classList.remove("hidden");
       shadowRoot.querySelector("div#contextmenu > span#hr1").classList.remove("hidden"); 
+      shadowRoot.querySelector("div#contextmenu > span#sharefile").classList.remove("hidden");
       shadowRoot.querySelector("div#contextmenu > span#renamefile").classList.remove("hidden");
       shadowRoot.querySelector("div#contextmenu > span#deletefile").classList.remove("hidden"); 
       shadowRoot.querySelector("div#contextmenu > span#downloadfile").classList.remove("hidden");  
@@ -241,7 +248,7 @@ async function showProgress(element, currentBlock, totalBlocks, fileName) {
 
 function closeProgressAndReloadIfAllFilesUploaded(element, filesAndPercents) {
    for (const file of Object.keys(filesAndPercents)) if (filesAndPercents[file] != 100) return;
-   setTimeout(_=>{hideDialog(element); router.reload();}, DIALOG_HIDE_WAIT); // hide dialog if all files done, after a certian wait
+   setTimeout(_=>{hideDialog(element); router.reload();}, DIALOG_HIDE_WAIT); // hide dialog if all files done, after a certain wait
 }
 
 const showErrorDialog = async (element, hideAction) => showDialog(element, "error", {error:await i18n.get("Error", session.get($$.MONKSHU_CONSTANTS.LANG_ID))}, hideAction);
@@ -278,6 +285,18 @@ function renameFile(element) {
    showDialog(element, "renamefiledialog", oldName?{oldName}:undefined);
 }
 
+async function shareFile(element) {
+   const resp = await apiman.rest(API_SHAREFILE, "GET", {path: selectedPath}, true);
+   if (!resp || !resp.result) showErrorDialog(element); 
+   else showDialog(element, "sharefiledialog", {link: `${API_DOWNLOADFILE_SHARED}?id=${resp.id}`});
+}
+
+function copyShareClicked(element) {
+   const shadowRoot = file_manager.getShadowRootByContainedElement(element);
+   navigator.clipboard.writeText(shadowRoot.querySelector("input#sharedisplay").value);
+   shadowRoot.querySelector("span#copied").style.opacity=1; setTimeout(_=>shadowRoot.querySelector("span#copied").style.opacity=0, DIALOG_HIDE_WAIT);
+}
+
 async function doRename(element) {
    const newName = file_manager.getShadowRootByContainedElement(element).querySelector("#renamepath").value;
    const subpaths = selectedPath.split("/"); subpaths.splice(subpaths.length-1, 1, newName);
@@ -298,7 +317,11 @@ async function _performCopy(fromPath, toPath, element) {
    if (!resp || !resp.result) showErrorDialog(element, _=>router.reload()); else router.reload();
 }
 
+function isMobile() {
+   return navigator.maxTouchPoints?true:false;
+}
+
 export const file_manager = { trueWebComponentMode: true, elementConnected, elementRendered, handleClick, 
    showMenu, deleteFile, editFile, downloadFile, cut, copy, paste, upload, uploadFiles, hideDialog, createFile, 
-   create, renameFile, doRename, doReplaceContent, menuEventDispatcher }
+   create, shareFile, renameFile, doRename, doReplaceContent, menuEventDispatcher, copyShareClicked, isMobile }
 monkshu_component.register("file-manager", `${APP_CONSTANTS.APP_PATH}/components/file-manager/file-manager.html`, file_manager);

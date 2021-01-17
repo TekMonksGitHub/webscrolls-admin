@@ -103,7 +103,7 @@ div#modal {
     z-index: 100;
 }
 
-div#progresscontainer, div#filepathcontainer, div#errorcontainer, div#editcontainer {
+div#progresscontainer, div#filepathcontainer, div#errorcontainer, div#editcontainer, div#sharecontainer {
     width: 400px;
     height: 240px;
     top: calc(50% - 120px);
@@ -126,8 +126,35 @@ div#errorcontainer {
     left: calc(50% - 100px);
 }
 
+div#sharecontainer {
+    height: 200px;
+    top: calc(50% - 100px);
+}
+
 div#errorcontainer > span#errordisplay {
     padding-bottom: 50px;
+    overflow: hidden;
+}
+
+div#sharecontainer > input#sharedisplay {
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border-style: none;
+    outline: none;
+    text-align: left;
+    font-family: 'Raleway';
+    background-color: #F0F8FF;
+    box-shadow: 0 0 0px 1000px #F0F8FF inset;
+}
+
+div#sharecontainer > span#copied {
+    font-family: 'Raleway';
+    font-size: small;
+    transition: opacity 1s;
+    opacity: 0;
 }
 
 div#editcontainer {
@@ -150,7 +177,6 @@ div#editcontainer > form > textarea {
     text-align: left;
     font-family: 'Raleway';
     background-color: #F0F8FF;
-    -webkit-box-shadow: 0 0 0px 1000px #F0F8FF inset;
     box-shadow: 0 0 0px 1000px #F0F8FF inset;
 }
 
@@ -196,11 +222,10 @@ div#filepathcontainer > form > input[type=text] {
     text-align: left;
     font-family: 'Raleway';
     background-color: #F0F8FF;
-    -webkit-box-shadow: 0 0 0px 1000px #F0F8FF inset;
     box-shadow: 0 0 0px 1000px #F0F8FF inset;
 }
 
-div#filepathcontainer > form > div, div#editcontainer > form > div {
+div#filepathcontainer > form > div, div#editcontainer > form > div, div#sharecontainer > div {
     display: inline-flex;
     flex-flow: row nowrap;
     margin-top: 40px;
@@ -219,7 +244,6 @@ div#filepathcontainer > form > div > span, div#editcontainer > form > div > span
     text-align: center;
     font-family: 'Raleway';
     background-color: #F0F8FF;
-    -webkit-box-shadow: 0 0 0px 1000px #F0F8FF inset;
     box-shadow: 0 0 0px 1000px #F0F8FF inset;
     font-size: 0.8em;
     cursor: default;
@@ -227,12 +251,11 @@ div#filepathcontainer > form > div > span, div#editcontainer > form > div > span
 
 div#filepathcontainer > form > div > span.checked, div#editcontainer > form > div > span.checked {
     background-color: rgb(42, 139, 250);
-    -webkit-box-shadow: 0 0 0px 1000px rgb(42, 139, 250) inset;
     box-shadow: 0 0 0px 1000px rgb(42, 139, 250) inset;
     color:rgba(255, 255, 255, 1);
 }
 
-div#filepathcontainer > form > div > button, div#editcontainer > form > div > button, div#errorcontainer > div > button {
+div#filepathcontainer > form > div > button, div#editcontainer > form > div > button, div#errorcontainer > div > button, div#sharecontainer > div > button {
     width: calc(50% - 40px);
     padding: 20px;
     box-sizing: border-box;
@@ -247,7 +270,7 @@ div#errorcontainer > div > button {
     width: 120px;
 }
 
-div#filepathcontainer > form > div > button:hover, div#editcontainer > form > div > button:hover, div#errorcontainer > div > button:hover {
+div#filepathcontainer > form > div > button:hover, div#editcontainer > form > div > button:hover, div#errorcontainer > div > button:hover, div#sharecontainer > div > button:hover {
     filter: brightness(98%);
     transition: all 0.3s ease;
 }
@@ -257,7 +280,10 @@ div#filepathcontainer > form > div > button:hover, div#editcontainer > form > di
 
 <div id="container">
     {{#entries}}
-    <span><img src="./img/{{#stats.directory}}folder{{/stats.directory}}{{#stats.file}}file{{/stats.file}}{{#stats.back}}back{{/stats.back}}{{#stats.home}}home{{/stats.home}}{{#stats.upload}}upload{{/stats.upload}}{{#stats.create}}create{{/stats.create}}{{#stats.paste}}paste{{/stats.paste}}.png" onclick='event.stopPropagation(); monkshu_env.components["file-manager"].handleClick(this, "{{path}}", "{{#stats.directory}}true{{/stats.directory}}{{#stats.home}}true{{/stats.home}}{{#stats.back}}true{{/stats.back}}{{#stats.upload}}false{{/stats.upload}}{{#stats.create}}false{{/stats.create}}{{#stats.paste}}false{{/stats.paste}}");' id="{{#stats.home}}home{{/stats.home}}{{#stats.back}}back{{/stats.back}}{{#stats.upload}}upload{{/stats.upload}}{{#stats.create}}create{{/stats.create}}{{#stats.paste}}paste{{/stats.paste}}">{{name}}</span>
+    <span><img src="./img/{{#stats.directory}}folder{{/stats.directory}}{{#stats.file}}file{{/stats.file}}{{#stats.back}}back{{/stats.back}}{{#stats.home}}home{{/stats.home}}{{#stats.upload}}upload{{/stats.upload}}{{#stats.create}}create{{/stats.create}}{{#stats.paste}}paste{{/stats.paste}}.png" 
+        onclick='event.preventDefault(); event.stopPropagation(); monkshu_env.components["file-manager"].handleClick(this, "{{path}}", "{{#stats.directory}}true{{/stats.directory}}{{#stats.home}}true{{/stats.home}}{{#stats.back}}true{{/stats.back}}{{#stats.upload}}false{{/stats.upload}}{{#stats.create}}false{{/stats.create}}{{#stats.paste}}false{{/stats.paste}}", true);' 
+        oncontextmenu='if (monkshu_env.components["file-manager"].isMobile()) return; event.preventDefault(); event.stopPropagation(); monkshu_env.components["file-manager"].handleClick(this, "{{path}}", "{{#stats.directory}}true{{/stats.directory}}{{#stats.home}}true{{/stats.home}}{{#stats.back}}true{{/stats.back}}{{#stats.upload}}false{{/stats.upload}}{{#stats.create}}false{{/stats.create}}{{#stats.paste}}false{{/stats.paste}}");' 
+        id="{{#stats.home}}home{{/stats.home}}{{#stats.back}}back{{/stats.back}}{{#stats.upload}}upload{{/stats.upload}}{{#stats.create}}create{{/stats.create}}{{#stats.paste}}paste{{/stats.paste}}">{{name}}</span>
     {{/entries}}
     <input id="upload" type="file" multiple onchange='monkshu_env.components["file-manager"].uploadFiles(this, this.files)' onclick="event.stopPropagation();">
 </div>
@@ -272,6 +298,7 @@ div#filepathcontainer > form > div > button:hover, div#editcontainer > form > di
     <span id="create" onclick='event.stopPropagation();monkshu_env.components["file-manager"].menuEventDispatcher("create",this)'>{{i18n.CreateMenu}}</span>
     <span id="paste" onclick='event.stopPropagation();monkshu_env.components["file-manager"].menuEventDispatcher("paste",this)'>{{i18n.Paste}}</span>
     <span id="hr2"><hr></span>
+    <span id="sharefile" onclick='event.stopPropagation();monkshu_env.components["file-manager"].menuEventDispatcher("shareFile",this)'>{{i18n.Share}}</span>
     <span id="renamefile" onclick='event.stopPropagation();monkshu_env.components["file-manager"].menuEventDispatcher("renameFile",this)'>{{i18n.Rename}}</span>
     <span id="deletefile" onclick='event.stopPropagation();monkshu_env.components["file-manager"].menuEventDispatcher("deleteFile",this)'>{{i18n.DeleteFile}}</span>
 </div>
@@ -333,6 +360,19 @@ div#filepathcontainer > form > div > button:hover, div#editcontainer > form > di
     <div id="errorcontainer">
     <span id="errordisplay">{{error}}</span>
     <div><button onclick='event.stopPropagation();monkshu_env.components["file-manager"].hideDialog(this);'>{{i18n.OK}}</button></div>
+    </div>
+    <%={{ }}=%> -->
+</template>
+<template id="sharefiledialog">
+    <!-- {{=<% %>=}} 
+    <div id="modal">&nbsp;</div>
+    <div id="sharecontainer">
+    <input type="text" readonly id="sharedisplay" value="{{link}}">
+    <span id="copied">{{i18n.Copied}}</span>
+    <div>
+    <button onclick='event.stopPropagation();monkshu_env.components["file-manager"].copyShareClicked(this);'>{{i18n.Copy}}</button>
+    <button onclick='event.stopPropagation();monkshu_env.components["file-manager"].hideDialog(this);'>{{i18n.Close}}</button>
+    </div>
     </div>
     <%={{ }}=%> -->
 </template>

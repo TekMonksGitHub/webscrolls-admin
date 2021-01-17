@@ -14,6 +14,7 @@ export const i18n = {
 "Search": "サーチ",
 "Upload":"アップロードする",
 "Create": "作成する",
+"Share": "送信してください...",
 "UploadMenu":"アップロードする...",
 "CreateMenu": "作成する...",
 "CreateFile": "新しいファイル...",
@@ -27,9 +28,11 @@ export const i18n = {
 "IsDirectory": "これはフォルダーですか？",
 "OK": "はい",
 "Cancel": "キャンセル",
+"Close": "閉じる",
 "NewName": "名前",
 "Rename": "新しい名前...",
 "File": "ファイル",
 "Directory": "ディレクトリ",
-"Error": "予期しないエラー 😢"
+"Error": "予期しないエラー 😢",
+"Copied": "コピーされました。"
 }
